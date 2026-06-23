@@ -1,6 +1,6 @@
 package com.example.aulajetpackcompose.model
 
 data class Usuario(
-    val nome: String,
+    val name: String,
     val idade: Int
 )
