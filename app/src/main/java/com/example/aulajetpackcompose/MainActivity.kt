@@ -1,13 +1,13 @@
 package com.example.aulajetpackcompose
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,18 +18,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -37,7 +39,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.aulajetpackcompose.componentes.Botao
 import com.example.aulajetpackcompose.model.Usuario
 import com.example.aulajetpackcompose.ui.theme.AulaJetpackComposeTheme
 
@@ -91,14 +92,179 @@ class MainActivity : ComponentActivity() {
         Usuario("eva", 62),
     )
 
+    private val opcoesRadio = listOf(
+        "Android", "IOs", "Flutter", "Reactive Native"
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AulaJetpackComposeTheme {
-                PrimeiroApp()
+                SegundoApp()
             }//Fechamento theme
         }
     }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun itemCartao(usuario: Usuario){
+        Card(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            onClick = {
+                Toast.makeText(applicationContext, "Clicado", Toast.LENGTH_SHORT)
+                    .show()
+            },
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.ui.graphics.Color.Magenta,
+                contentColor = Color.Green
+            )
+            //shape = RoundedCornerShape(20.dp)
+            /*elevation = CardDefaults.cardElevation(
+                defaultElevation = 8.dp
+            )*/
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.carro),
+                    null,
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "${usuario.name} - ${usuario.idade}",
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(start = 16.dp),
+                )
+            }
+        }
+    }
+
+
+    @Composable
+    fun SegundoApp() {
+
+        var contador by remember {
+            mutableStateOf(0)
+        }
+
+        var nome by remember {
+            mutableStateOf("")
+        }
+
+        var checked by remember {
+            mutableStateOf(false)
+        }
+
+        var radioSelecionado by remember {
+            mutableStateOf(opcoesRadio[0])
+        }
+
+        var listaUsuarios by remember {
+            mutableStateOf(listOf<Usuario>())
+        }
+
+        Column(
+            modifier = Modifier
+                .background(Color.Gray)
+                .padding(16.dp)
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+
+            LazyColumn() {
+                items(usuarios){ usuario ->
+                    itemCartao(usuario = usuario)
+                }
+            }
+
+           /* opcoesRadio.forEach { opcao ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = opcao == radioSelecionado,
+                        onClick = {
+                            radioSelecionado = opcao
+                        }
+                    )
+                    Text(text = opcao)
+                }
+            }*/
+            Text(text = "alterado: $radioSelecionado")
+
+            //Switch(
+            /*  Checkbox(
+                  checked = checked,
+                  { alterado ->
+                      checked = alterado
+                  }
+              )
+              */
+
+            //Mais componentes de interface: Fab, checkBox, Switch, Radio
+            //FloatingActionButton(
+            /*  ExtendedFloatingActionButton(
+                  *//*containerColor = Color.Magenta,
+                contentColor = Color.White,*//*
+                onClick = {}) {
+              *//*  Icon(
+                    painter = painterResource(R.drawable.ic_add_24),
+                    null)*//*
+                Text(text = "Pesquisar")
+            }*/
+
+            /* Row() {
+                 //TextField(
+                 OutlinedTextField(
+                     value = nome,
+                     onValueChange = { texto ->
+                         nome = texto
+                         Log.i("valorDigitado", "valorDigitado: $texto ")
+                     },
+                     placeholder = {
+                         Text(text = "Digite seu nomeFra")
+                     }
+                 )
+
+                 Spacer(modifier = Modifier
+                     .width(8.dp))
+
+                 Button(onClick = {
+                      //adiconar na lista
+                     val usuario = Usuario(nome, 0)
+                     listaUsuarios = listaUsuarios + usuario
+                 }) {
+                     Icon(
+                         painter = painterResource(R.drawable.ic_add_24),
+                         null)
+                 }
+             }*/
+
+            /*   LazyColumn(
+                   modifier = Modifier.padding(
+                       top = 16.dp,
+                       bottom = 16.dp)
+               ) {
+                   items(listaUsuarios){ usuario ->
+                       Text(
+                           text = "+) ${usuario.name}",
+                           modifier = Modifier.padding(8.dp)
+                       )
+                       Divider()
+                   }
+               }*/
+
+
+        }//fim column
+    }//fim metod segundo App
 
     @Composable
     fun PrimeiroApp() {
@@ -148,13 +314,13 @@ class MainActivity : ComponentActivity() {
           }//fim column*/
         Column(
             modifier = Modifier
-               // .width(80.dp)
+                // .width(80.dp)
                 //.height(80.dp)
                 .background(Color.Gray)
                 .border(2.dp, Color.Red)
                 .padding(30.dp, 10.dp)
-               .fillMaxWidth()
-               .fillMaxHeight()
+                .fillMaxWidth()
+                .fillMaxHeight()
         ) {
             /*Text(text = "Cleonis", fontSize = 20.sp)
             Column(
@@ -212,13 +378,13 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .padding(16.dp)
             )*/
-            LazyHorizontalGrid (
+            LazyHorizontalGrid(
                 rows = GridCells.Fixed(3),
                 modifier = Modifier
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ){
-                items(usuarios.size){ indice ->
+            ) {
+                items(usuarios.size) { indice ->
 
                     val nome = usuarios[indice].name
                     val idade = usuarios[indice].idade
@@ -235,31 +401,31 @@ class MainActivity : ComponentActivity() {
                         Text(text = "$nome")
                     }
 
-                 /*  Row(
-                       modifier = Modifier
-                           .padding(top = 16.dp, bottom = 16.dp),
-                       verticalAlignment = Alignment.CenterVertically
-                   ) {
-                       Image(
-                           painter = painterResource(R.drawable.carro),
-                           null,
-                           modifier = Modifier
-                               .width(80.dp)
-                               .height(80.dp),
-                           contentScale = ContentScale.Crop
-                       )
-                       Text(
-                           text = "$nome - $idade",
-                           fontSize = 32.sp,
-                           modifier = Modifier.padding(start = 16.dp),
-                       )
-                   }*///fim row
-                   /* Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color.Red)
-                    )*/
+                    /*  Row(
+                          modifier = Modifier
+                              .padding(top = 16.dp, bottom = 16.dp),
+                          verticalAlignment = Alignment.CenterVertically
+                      ) {
+                          Image(
+                              painter = painterResource(R.drawable.carro),
+                              null,
+                              modifier = Modifier
+                                  .width(80.dp)
+                                  .height(80.dp),
+                              contentScale = ContentScale.Crop
+                          )
+                          Text(
+                              text = "$nome - $idade",
+                              fontSize = 32.sp,
+                              modifier = Modifier.padding(start = 16.dp),
+                          )
+                      }*///fim row
+                    /* Box(
+                         modifier = Modifier
+                             .fillMaxWidth()
+                             .height(1.dp)
+                             .background(Color.Red)
+                     )*/
                 }
             }
 
@@ -279,8 +445,8 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @Preview
-    fun PrimeiroAppPreview() {
-        PrimeiroApp()
+    fun AppPreview() {
+        SegundoApp()
     }
 }//fechamento mainActivity
 
