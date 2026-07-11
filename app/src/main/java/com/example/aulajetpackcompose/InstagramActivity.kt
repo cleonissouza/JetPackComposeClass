@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.aulajetpackcompose.componentes.AreaDestaque
 import com.example.aulajetpackcompose.componentes.AreaPostagem
+import com.example.aulajetpackcompose.componentes.BarraInferior
 import com.example.aulajetpackcompose.componentes.BarraSuperior
 import com.example.aulajetpackcompose.model.Destaque
 import com.example.aulajetpackcompose.model.Postagem
@@ -139,7 +140,7 @@ class InstagramActivity : ComponentActivity() {
                     },
                     bottomBar = {
                         BottomAppBar() {
-                            Text("Bottom App Bar")
+                            BarraInferior()
                         }
                     },
                     /*floatingActionButton = {
